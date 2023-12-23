@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '../App.module.css';
 
 export const TodoInput = ({ newTodo, setNewTodo, addTodo, setSearchTerm, handleSearch, setSortByAlphabet }) => {

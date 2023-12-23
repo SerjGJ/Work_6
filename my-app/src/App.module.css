@@ -1,3 +1,10 @@
+:root {
+	--primary-color: #3498db;
+	--success-color: #4caf50;
+	--success-hover-color: #45a049;
+	--font-size-large: 20px;
+}
+
 .app {
 	display: flex;
 	flex-direction: column;
@@ -8,13 +15,31 @@
 }
 
 .title {
-	margin-bottom: 20px;
+	font-size: 3em;
+	margin-bottom: 50px;
+}
+
+h2 {
+	font-size: 2em;
+	color: var(--primary-color);
+}
+
+li a {
+	font-size: 1.5em;
+	color: var(--primary-color);
+	text-decoration: none;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+li a:hover {
+	text-decoration: underline;
 }
 
 .showButton,
 .inputField {
 	padding: 10px 20px;
-	font-size: 20px;
+	font-size: var(--font-size-large);
 	border: none;
 	border-radius: 20px;
 	transition: background-color 0.3s;
@@ -22,12 +47,12 @@
 }
 
 .showButton {
-	background-color: #4caf50;
+	background-color: var(--success-color);
 	color: white;
 }
 
 .showButton:hover {
-	background-color: #45a049;
+	background-color: var(--success-hover-color);
 }
 
 .inputField {
@@ -47,8 +72,44 @@
 .todoList li {
 	font-size: 25px;
 	margin-bottom: 20px;
+	margin-right: 10px;
 }
 
-.todoList li {
-	margin-right: 10px;
+.errorPage {
+	text-align: center;
+	padding: 20px;
+}
+
+.backButton {
+	position: fixed;
+	bottom: 600px;
+	left: 275px;
+	font-size: 1em;
+	padding: 10px;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	border-radius: 20px;
+	background-color: var(--success-color);
+}
+
+.backButton:hover {
+	background-color: var(--success-hover-color);
+}
+
+.linkContainer {
+	margin-top: 20px;
+	font-size: var(--font-size-large);
+	font-weight: bold;
+}
+
+.linkContainer a {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.linkContainer a:hover {
+	text-decoration: underline;
 }

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styles from './App.module.css';
 import { TodoInput } from './components/TodoInput';
 import { TodoList } from './components/TodoList';
+import { TaskPage } from './components/TodoListPage';
 
 export const App = () => {
 	const [todos, setTodos] = useState([]);
@@ -89,25 +91,56 @@ export const App = () => {
 	};
 
 	return (
-		<div className={styles.app}>
-			<h1 className={styles.title}>Список задач</h1>
-			<TodoInput
-				newTodo={newTodo}
-				setNewTodo={setNewTodo}
-				addTodo={addTodo}
-				setSearchTerm={setSearchTerm}
-				handleSearch={handleSearch}
-				setSortByAlphabet={() => setSortByAlphabet(!sortByAlphabet)}
-			/>
-			<TodoList
-				sortedTodos={sortedTodos}
-				editableTodoId={editableTodoId}
-				editedTodoText={editedTodoText}
-				deleteTodo={deleteTodo}
-				startEdit={startEdit}
-				saveEdit={saveEdit}
-				setEditedTodoText={setEditedTodoText}
-			/>
-		</div>
+		<Router>
+			<div className={styles.app}>
+				<h1 className={styles.title}>Список задач</h1>
+				<Routes>
+					<Route
+						path="/"
+						element={
+							<>
+								<TodoInput
+									newTodo={newTodo}
+									setNewTodo={setNewTodo}
+									addTodo={addTodo}
+									setSearchTerm={setSearchTerm}
+									handleSearch={handleSearch}
+									setSortByAlphabet={() => setSortByAlphabet(!sortByAlphabet)}
+								/>
+								<TodoList sortedTodos={sortedTodos} showButtons={false} />
+							</>
+						}
+					/>
+					<Route
+						path="/task/:taskId"
+						element={
+							<TaskPage
+								todos={todos}
+								editableTodoId={editableTodoId}
+								editedTodoText={editedTodoText}
+								startEdit={startEdit}
+								saveEdit={saveEdit}
+								deleteTodo={deleteTodo}
+								setEditedTodoText={setEditedTodoText}
+							/>
+						}
+					/>
+					<Route
+						path="/task/:taskId"
+						element={
+							<TaskPage
+								todos={todos}
+								editableTodoId={editableTodoId}
+								editedTodoText={editedTodoText}
+								startEdit={startEdit}
+								saveEdit={saveEdit}
+								deleteTodo={deleteTodo}
+								setEditedTodoText={setEditedTodoText}
+							/>
+						}
+					/>
+				</Routes>
+			</div>
+		</Router>
 	);
 };
