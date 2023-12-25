@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import styles from './App.module.css';
 import { TodoInput } from './components/TodoInput';
 import { TodoList } from './components/TodoList';
 import { TaskPage } from './components/TodoListPage';
+import { NotFoundPage } from './components/NotFoundPage';
 
 export const App = () => {
 	const [todos, setTodos] = useState([]);
@@ -54,6 +55,8 @@ export const App = () => {
 				if (response.ok) {
 					const updatedTodos = todos.filter((todo) => todo.id !== id);
 					setTodos(updatedTodos);
+					setEditableTodoId(null);
+					setEditedTodoText('');
 				}
 			})
 			.catch((error) => console.error(error));
@@ -107,7 +110,14 @@ export const App = () => {
 									handleSearch={handleSearch}
 									setSortByAlphabet={() => setSortByAlphabet(!sortByAlphabet)}
 								/>
-								<TodoList sortedTodos={sortedTodos} showButtons={false} />
+								<TodoList
+									sortedTodos={sortedTodos}
+									showButtons={false}
+									startEdit={startEdit}
+									saveEdit={saveEdit}
+									deleteTodo={deleteTodo}
+									setEditedTodoText={setEditedTodoText}
+								/>
 							</>
 						}
 					/>
@@ -125,20 +135,8 @@ export const App = () => {
 							/>
 						}
 					/>
-					<Route
-						path="/task/:taskId"
-						element={
-							<TaskPage
-								todos={todos}
-								editableTodoId={editableTodoId}
-								editedTodoText={editedTodoText}
-								startEdit={startEdit}
-								saveEdit={saveEdit}
-								deleteTodo={deleteTodo}
-								setEditedTodoText={setEditedTodoText}
-							/>
-						}
-					/>
+					<Route path="/404" element={<NotFoundPage />} />
+					<Route path="*" element={<Navigate to="/404" />} />
 				</Routes>
 			</div>
 		</Router>

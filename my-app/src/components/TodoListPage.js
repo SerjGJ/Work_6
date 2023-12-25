@@ -1,31 +1,52 @@
-import React from 'react';
-import { Link, useNavigate, useMatch } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useMatch } from 'react-router-dom';
 import styles from '../App.module.css';
 import { TodoItem } from './TodoItem';
+import { NotFoundPage } from './NotFoundPage';
 
-export const TaskPage = ({ todos, editableTodoId, editedTodoText, startEdit, saveEdit, deleteTodo, setEditedTodoText }) => {
+export const TaskPage = ({ todos, startEdit, saveEdit, deleteTodo, setEditedTodoText }) => {
 	const navigate = useNavigate();
 	const match = useMatch('/task/:taskId');
 	const taskId = match?.params.taskId;
+	const [todo, setTodo] = useState(null);
+	const [loading, setLoading] = useState(true);
 
 	const goBack = () => {
 		navigate('/');
 	};
 
-	const todo = todos.find((todo) => String(todo.id) === taskId);
+	useEffect(() => {
+		if (!taskId) {
+			return;
+		}
+
+		setLoading(true);
+
+		fetch(`http://localhost:3001/todos/${taskId}`)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error('Задача не найдена');
+				}
+				return response.json();
+			})
+			.then((data) => {
+				setTodo(data);
+			})
+			.catch((error) => {
+				console.error(error);
+				setTodo(null);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}, [taskId, todos, setTodo]);
+
+	if (loading) {
+		return null;
+	}
 
 	if (!todo) {
-		return (
-			<div className={styles.errorPage}>
-				<h2>Ошибка 404: Страница не найдена</h2>
-				<p className={styles.linkContainer}>
-					Вернуться на{' '}
-					<Link to="/" className={styles.link}>
-						Главную страницу
-					</Link>
-				</p>
-			</div>
-		);
+		return <NotFoundPage />;
 	}
 
 	return (
@@ -36,13 +57,11 @@ export const TaskPage = ({ todos, editableTodoId, editedTodoText, startEdit, sav
 			<h2>{todo.text}</h2>
 			<TodoItem
 				todo={todo}
-				editableTodoId={editableTodoId}
-				editedTodoText={editedTodoText}
-				startEdit={startEdit}
+				showButtons={true}
+				startEdit={() => startEdit(todo.id, todo.text)}
 				saveEdit={saveEdit}
 				deleteTodo={deleteTodo}
-				setEditedTodoText={setEditedTodoText}
-				showButtons={true}
+				setEditedTodoText={(text) => setEditedTodoText(text)}
 			/>
 		</div>
 	);
